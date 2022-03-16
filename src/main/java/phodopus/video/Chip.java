@@ -22,42 +22,12 @@ import java.util.stream.Stream;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-public final class Chip
+public record Chip( String name, List< String > inputs, List< Expression > outputs, IntFunction< String > formatter )
 {
-    private final String name;
-
-    private final List< String > inputs;
-
-    private final List< Expression > outputs;
-
-    private final IntFunction< String > formatter;
-
-    public Chip( String name, List< String > inputs, List< Expression > outputs, IntFunction< String > formatter )
+    public Chip
     {
-        this.name = name;
-        this.inputs = inputs;
-        this.outputs = outputs;
-        this.formatter = formatter;
-
-        assert !inputs.contains( "bit" ) : "Some unnamed input pins";
-        assert !outputs.stream().anyMatch( exp -> exp.name().equals( "bit" ) ) : "Some unnamed output pins";
         assert outputs.size() <= 10 : "Too many outputs";
         assert ( inputs.size() + outputs.size() ) <= 21 : "Too many pins in total";
-    }
-
-    public String name()
-    {
-        return this.name;
-    }
-
-    public List< String > inputs()
-    {
-        return this.inputs;
-    }
-
-    public List< Expression > outputs()
-    {
-        return this.outputs;
     }
 
     public String state( int value )
@@ -130,6 +100,8 @@ public final class Chip
 
         public BitFormatter( String format )
         {
+            // TODO this code is awful
+
             // e.g. "[0,MYFLAG] some string [1-4] [x1-4]"
             this.format = format;
 

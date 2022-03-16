@@ -30,45 +30,44 @@ public final class Video
 {
     public static void main( String[] args )
     {
-        Chip vcounter = vcounter();
         Chip hcounter = hcounter();
+        Chip vcounter = vcounter();
         Chip hflags = hflags();
         Chip vflags = vflags();
         Chip addr0 = addr0();
         Chip addr1 = addr1();
         Chip pixelconv = pixelconv();
 
-        ImmutableList< Chip > chips = ImmutableList.of( hcounter, vcounter, hflags, vflags, addr0, addr1, pixelconv );
+        List< Chip > chips = ImmutableList.of( hcounter, vcounter, hflags, vflags, addr0, addr1, pixelconv );
         dumpAllExpressions( chips );
 
         Simulation simulation = Simulation.create( chips );
         runFullSimulation( simulation );
-//        runAddressSimulation( simulation );
     }
 
-    private static void dumpAllExpressions( ImmutableList< Chip > chips )
+    private static void dumpAllExpressions( List< Chip > chips )
     {
         for ( Chip chip : chips )
         {
             System.out.println( chip.name() );
-            System.out.println(  );
+            System.out.println();
             chip.dumpExpressions();
-            System.out.println(  );
+            System.out.println();
             System.out.println( "--------------" );
-            System.out.println(  );
+            System.out.println();
         }
     }
 
     private static void runFullSimulation( Simulation simulation )
     {
-        State state = simulation.zeroState().with( "Clear", true );
+        State state = simulation.zeroState();
 
         for ( int i = 0; i < 525 * 400 + 130 * 400; i++ )
         {
             state = state.next();
             if ( state.number( "H0", 10 ) == 0 )
             {
-                System.out.println(  );
+                System.out.println();
             }
 
             System.out.printf( "%04d %03d %02x%02x %s %s %s %s %s %s %s %s %s %s %s %s %s %s%n",
@@ -151,13 +150,23 @@ public final class Video
 
     private static Chip hcounter()
     {
-        List< String > inputs = ImmutableList.of( "Clear" );
         List< String > outputNames = concat( bitRange( "H", 9 ), "HE399" );
+        List< String > inputs = ImmutableList.of( "Clear" );
+        int clear = outputNames.size();
 
-        List< TruthTable > tables = TruthTable
-            .createMany( inputs,
-                         outputNames,
-                         i -> isSet( i, 9 ) || isSet( i, 10 ) ? 0 : ( ( ( i & 511 ) + 1 ) & 511 ) | ( i == 398 && !isSet( i, 10 ) ? 512 : 0 ) );
+        List< TruthTable > tables = TruthTable.createMany( inputs, outputNames, i ->
+        {
+            if ( isSet( i, 9 ) || isSet( i, clear ) )
+            {
+                // HE399 or Clear -> reset to zero.
+                return 0;
+            }
+
+            int counter = ( ( i & 511 ) + 1 ) & 511;
+            int he399 = i == 398 && !isSet( i, 10 ) ? 1 << 9 : 0;
+            return counter | he399;
+        } );
+
         List< Expression > outputs = optimise( tables );
 
         return new Chip( "hcounter",
@@ -168,19 +177,19 @@ public final class Video
 
     private static Chip vcounter()
     {
-        List< String > inputs = ImmutableList.of( "HE399", "VE524", "Clear" );
         List< String > outputNames = bitRange( "V", 10 );
+        List< String > inputs = ImmutableList.of( "HE399", "VE524", "Clear" );
         int he399 = outputNames.size();
         int ve524 = he399 + 1;
         int clear = ve524 + 1;
 
-        List< TruthTable > tables = TruthTable
-            .createMany( inputs,
-                         outputNames,
-                         i ->
+        List< TruthTable > tables = TruthTable.createMany( inputs,
+                                                           outputNames,
+                                                           i ->
         {
             if ( isSet( i, clear ) || ( isSet( i, ve524 ) && isSet( i, he399 ) ) )
             {
+                // HE399*VE524 or Clear -> reset to zero.
                 return 0;
             }
 
@@ -360,11 +369,14 @@ public final class Video
 
         List< TruthTable > tables = TruthTable.createMany( inputs, outputNames, i ->
         {
+            int inc = ( i & mask ) + 1;
+            int dec = ( i & mask ) - 1;
+
             // If AC and INCADDR are to be set next clock, then this is what A14 will be.
-            int a14inc = ( ( ( i & mask ) + 1 ) & 64 ) != 0 ? 1 << 7 : 0;
+            int a14inc = ( inc & 64 ) != 0 ? 1 << 7 : 0;
 
             // If AC and REPLINE2 are to be set next clock, then this is what A14 will be.
-            int a14rep = ( ( ( i & mask ) - 1 ) & 64 ) != 0 ? 1 << 8 : 0;
+            int a14rep = ( dec & 64 ) != 0 ? 1 << 8 : 0;
 
             int a14flags = a14inc | a14rep;
 
@@ -378,7 +390,7 @@ public final class Video
                 // was REPLINE -- had to borrow 256
 
                 // For A8..A13, just use the subtraction.
-                int result = ( ( ( i & mask ) - 1 ) & 63 ) | a14flags;
+                int result = ( dec & 63 ) | a14flags;
 
                 // For A14, use A14REP.
                 result |= isSet( i, 8 ) ? 1 << 6 : 0;
@@ -389,7 +401,7 @@ public final class Video
                 // INCADDR -- had to carry 256
 
                 // For A8..A13, just use the addition.
-                int result = ( ( ( i & mask ) + 1 ) & 63 ) | a14flags;
+                int result = ( inc & 63 ) | a14flags;
 
                 // For A14, use A14INC.
                 result |= isSet( i, 7 ) ? 1 << 6 : 0;

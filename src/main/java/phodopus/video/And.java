@@ -40,13 +40,22 @@ public final class And implements Comparable< And >
             int bit = 1 << i;
             switch ( bits.get( i ) )
             {
-                case TRUE -> { im |= bit; sm |= bit; }
+                case TRUE ->
+                {
+                    im |= bit;
+                    sm |= bit;
+                }
                 case FALSE -> im |= bit;
-                default -> {}
+                default ->
+                {
+                    // nothing
+                }
             }
         }
         this.interestMask = im;
         this.setMask = sm;
+
+        assert ( ~this.interestMask & this.setMask ) == 0;
     }
 
     public static And of( Iterable< BitState > bits )
@@ -80,27 +89,52 @@ public final class And implements Comparable< And >
     }
 
     /**
-     * Do all the cases covered by this instance's interest mask (all bits that are
-     * not "don't care") have a 1 output?
+     * Determines if all matching combinations (that is, inputs that evaluate to 1)
+     * have a 1 in the given table.
+     * <p>
+     * It does not check any combinations that do not match (that is, inputs that
+     * evaluate to 0).
      *
      * @param table
      *            the truth table
-     * @return
+     * @param bitCount
+     *            the bit count of the table
+     * @return whether all match
      */
     public boolean testAll( BitSet table, int bitCount )
     {
-        int end = 1 << bitCount;
+        // The fewer bits used, the more combinations there are to check.
+        int usedBits = Integer.bitCount( this.interestMask );
+        int unusedBits = bitCount - usedBits;
+        int combinations = 1 << unusedBits;
 
-        for ( int input = 0; input < end; input++ )
+        for ( int combination = 0; combination < combinations; combination++ )
         {
-            if ( ( input & this.interestMask ) == this.setMask )
+            // Turn a combination into an input that yields 1 for this expression.
+            // Firstly, it must have all bits in setMask.
+            // Secondly, any bit not in interestMask must be set according to the
+            // combination.
+            int input = this.setMask;
+            int data = combination;
+            for ( int i = 0; i < bitCount; i++ )
             {
-                // This is a case that is covered by this statement.
-                if ( !table.get( input ) )
+                int bit = 1 << i;
+
+                // Is this a DONT_CARE bit?
+                if ( ( this.interestMask & bit ) == 0 )
                 {
-                    // It's a 0, so it's not good.
-                    return false;
+                    input |= ( 1 << i ) * ( data & 1 );
+                    data >>>= 1;
                 }
+            }
+
+            // This must be a case that is covered.
+            assert ( input & this.interestMask ) == this.setMask;
+
+            if ( !table.get( input ) )
+            {
+                // It's a 0, so it's not good.
+                return false;
             }
         }
 

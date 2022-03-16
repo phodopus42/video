@@ -25,13 +25,31 @@ import com.google.common.base.Strings;
 
 import phodopus.video.And.BitState;
 
+/**
+ * Table of 'n' input bits giving one result bit for each combination.
+ *
+ * @param name
+ *            the table name
+ * @param table
+ *            bit set containing results, sized according to the number of
+ *            inputs
+ * @param bitCount
+ *            count of input bits
+ * @author matthew
+ */
 public record TruthTable( String name, BitSet table, int bitCount )
 {
-    public static TruthTable create( int bitCount, IntPredicate bitTester )
-    {
-        return create( "bit", bitCount, bitTester );
-    }
-
+    /**
+     * Creates a table based on a number of inputs behaving as an integer.
+     *
+     * @param name
+     *            the table name
+     * @param bitCount
+     *            count of input bits
+     * @param bitTester
+     *            tester that will be called for each input value
+     * @return a new table
+     */
     public static TruthTable create( String name, int bitCount, IntPredicate bitTester )
     {
         BitSet table = new BitSet( 1 << bitCount );
@@ -42,11 +60,21 @@ public record TruthTable( String name, BitSet table, int bitCount )
         return new TruthTable( name, table, bitCount );
     }
 
-    public static TruthTable create( int bitCount, IntUnaryOperator operator, int bitOfInterest )
-    {
-        return create( "bit", bitCount, operator, bitOfInterest );
-    }
-
+    /**
+     * Creates a table based on a number of inputs behaving as an integer, giving an
+     * output as an integer, and sampling just one bit from that output. This is
+     * useful for things like counters.
+     *
+     * @param name
+     *            the table name
+     * @param bitCount
+     *            count of input bits
+     * @param operator
+     *            operator that will be called for each input value
+     * @param bitOfInterest
+     *            the bit number of interest to sample from the output values
+     * @return a new table
+     */
     public static TruthTable create( String name, int bitCount, IntUnaryOperator operator, int bitOfInterest )
     {
         int mask = 1 << bitOfInterest;
@@ -58,24 +86,17 @@ public record TruthTable( String name, BitSet table, int bitCount )
         return new TruthTable( name, table, bitCount );
     }
 
-    public static List< TruthTable > createMany( int bitCount, IntUnaryOperator operator )
-    {
-        return IntStream.range( 0, bitCount ).mapToObj( bitOfInterest -> TruthTable.create( bitCount, operator, bitOfInterest ) ).toList();
-    }
-
-    public static List< TruthTable > createMany( int inputBitCount, int outputBitCount, IntUnaryOperator operator )
-    {
-        return IntStream.range( 0, outputBitCount )
-                        .mapToObj( bitOfInterest -> TruthTable.create( inputBitCount, operator, bitOfInterest ) ).toList();
-    }
-
     /**
+     * Creates a table based on a number of inputs behaving as an integer, giving an
+     * output as an integer, and sampling all bits from that output. This is
+     * useful for things like counters.
+     *
      * @param inputs
      *            unique inputs, forming bits [outputs.size(), outputs.size()+inputs.size()-1]
      * @param outputs
      *            outputs, forming bits 0..[outputs.size()-1]
      * @param operator
-     *            the operator thing
+     *            operator that will be called for each input value
      * @return tables
      */
     public static List< TruthTable > createMany( List< String > inputs,
@@ -91,12 +112,18 @@ public record TruthTable( String name, BitSet table, int bitCount )
                         .toList();
     }
 
+    /**
+     * Optimises the table into an expression formed of an OR of ANDs.
+     *
+     * @return an expression
+     */
     public Expression optimise()
     {
         List< And > results = new ArrayList<>();
 
         BitSet todo = (BitSet) this.table.clone();
 
+        // Pick a bit that is set but is not part of an existing expression (yet).
         for ( int i = todo.nextSetBit( 0 ); i >= 0; i = todo.nextSetBit( i + 1 ) )
         {
             int output = i;
@@ -111,16 +138,22 @@ public record TruthTable( String name, BitSet table, int bitCount )
             for ( ListIterator< BitState > iterator = allBits.listIterator(); iterator.hasNext(); )
             {
                 BitState oldState = iterator.next();
+
+                // Speculatively try dropping.
                 iterator.set( BitState.DONT_CARE );
+
                 if ( !And.of( allBits ).testAll( this.table, this.bitCount ) )
                 {
-                    // Ah, can't remove this one.
+                    // Ah, can't remove this one.  Revert back.
                     iterator.set( oldState );
                 }
             }
+
             And and = And.of( allBits );
-            and.clearAll( todo, this.bitCount );
             results.add( and );
+
+            // Mark these bits as done.
+            and.clearAll( todo, this.bitCount );
         }
 
         assert todo.isEmpty();
@@ -130,6 +163,9 @@ public record TruthTable( String name, BitSet table, int bitCount )
         return new Expression( this.name, results );
     }
 
+    /**
+     * Dumps the Karnaugh map to the console.
+     */
     public void printKarnaughMap()
     {
         int rowBits = this.bitCount / 2;
@@ -172,10 +208,19 @@ public record TruthTable( String name, BitSet table, int bitCount )
         System.out.println();
     }
 
+    /**
+     * @return an inverse
+     */
     public TruthTable inverse()
     {
         BitSet clone = (BitSet) this.table.clone();
         clone.flip( 0, this.bitCount );
         return new TruthTable( "/" + this.name, clone, this.bitCount );
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.name;
     }
 }
