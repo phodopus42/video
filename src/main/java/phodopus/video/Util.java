@@ -67,4 +67,17 @@ public final class Util
     {
         return ImmutableList.copyOf( Iterables.concat( list, ImmutableList.of( item ) ) );
     }
+
+    public static void dumpAllExpressions( Iterable< Chip > chips )
+    {
+        for ( Chip chip : chips )
+        {
+            System.out.println( chip.name() );
+            System.out.println();
+            chip.dumpExpressions();
+            System.out.println();
+            System.out.println( "--------------" );
+            System.out.println();
+        }
+    }
 }

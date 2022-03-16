@@ -14,6 +14,7 @@ package phodopus.video;
 
 import static phodopus.video.Util.bitRange;
 import static phodopus.video.Util.concat;
+import static phodopus.video.Util.dumpAllExpressions;
 import static phodopus.video.Util.isBetween;
 import static phodopus.video.Util.isEqual;
 import static phodopus.video.Util.isSet;
@@ -43,19 +44,6 @@ public final class Video
 
         Simulation simulation = Simulation.create( chips );
         runFullSimulation( simulation );
-    }
-
-    private static void dumpAllExpressions( List< Chip > chips )
-    {
-        for ( Chip chip : chips )
-        {
-            System.out.println( chip.name() );
-            System.out.println();
-            chip.dumpExpressions();
-            System.out.println();
-            System.out.println( "--------------" );
-            System.out.println();
-        }
     }
 
     private static void runFullSimulation( Simulation simulation )
