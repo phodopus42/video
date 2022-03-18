@@ -57,12 +57,6 @@ public final class Util
         return tables.stream().map( TruthTable::optimise ).toList();
     }
 
-    @SafeVarargs
-    public static < T > List< T > concat( List< T >... lists )
-    {
-        return ImmutableList.copyOf( Iterables.concat( lists ) );
-    }
-
     public static < T > List< T > concat( List< T > list, T item )
     {
         return ImmutableList.copyOf( Iterables.concat( list, ImmutableList.of( item ) ) );
