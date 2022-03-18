@@ -9,3 +9,5 @@ export JAVA_HOME=/path/to/java/17
 mvn clean package
 mvn -q exec:java -Dexec.mainClass=phodopus.video.Video
 ```
+
+PLD files are in `src/pld`.
