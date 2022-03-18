@@ -97,6 +97,16 @@ public final class Simulation
             return new State( newValues );
         }
 
+        public State withNumber( String input, int count, int value )
+        {
+            int[] newValues = this.values.clone();
+            for ( int i = 0; i < count; i++ )
+            {
+                setImpl( newValues, input + i, ( value & ( 1 << i ) ) != 0 );
+            }
+            return new State( newValues );
+        }
+
         public State next()
         {
             int[] newValues = new int[ this.values.length ];

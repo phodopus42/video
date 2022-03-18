@@ -1,0 +1,65 @@
+GAL22V10    
+PixlConv
+
+
+Clock D7 D6 D5 D4 D3 D2 D1 D0 H0 VIS GND
+NC    B0 B1 G0 G1 R0 R1 E0 E1 E2 E3  VCC
+
+
+; 6 terms
+R0.R =
+       VIS *  H0 *  D3 * /D2 * /D1
+    +  VIS *  H0 *  D3 * /D2 *  D0
+    +  VIS *  H0 *  D3 *  D1 *  D0
+    +  VIS * /H0 *  E3 * /E2 * /E1
+    +  VIS * /H0 *  E3 * /E2 *  E0
+    +  VIS * /H0 *  E3 *  E1 *  E0
+
+; 2 terms
+R1.R =
+       VIS *  H0 *  D0
+    +  VIS * /H0 *  E0
+
+; 4 terms
+G0.R =
+       VIS *  H0 *  D3 * /D2 * /D0
+    +  VIS *  H0 *  D3 *  D1
+    +  VIS * /H0 *  E3 * /E2 * /E0
+    +  VIS * /H0 *  E3 *  E1
+
+; 2 terms
+G1.R =
+       VIS *  H0 *  D1
+    +  VIS * /H0 *  E1
+
+; 4 terms
+B0.R =
+       VIS *  H0 *  D3 *  D2
+    +  VIS *  H0 *  D3 * /D1 * /D0
+    +  VIS * /H0 *  E3 *  E2
+    +  VIS * /H0 *  E3 * /E1 * /E0
+
+; 2 terms
+B1.R =
+       VIS *  H0 *  D2
+    +  VIS * /H0 *  E2
+
+; 1 terms
+E0.R =
+       D4
+
+; 1 terms
+E1.R =
+       D5
+
+; 1 terms
+E2.R =
+       D6
+
+; 1 terms
+E3.R =
+       D7
+
+
+DESCRIPTION
+

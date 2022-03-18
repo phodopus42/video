@@ -49,10 +49,10 @@ public final class Video
     private static void runFullSimulation( Simulation simulation )
     {
         State state = simulation.zeroState();
+        state = state.with( "Clear", true ).next();
 
         for ( int i = 0; i < 525 * 400 + 130 * 400; i++ )
         {
-            state = state.next();
             if ( state.number( "H0", 10 ) == 0 )
             {
                 System.out.println();
@@ -77,6 +77,7 @@ public final class Video
                                state.formattedFlag( "AC" ),
                                state.formattedFlag( "A14INC" ),
                                state.formattedFlag( "A14REP" ) );
+            state = state.next();
         }
     }
 
@@ -201,7 +202,7 @@ public final class Video
     {
         List< String > outputNames = ImmutableList.of( "HS", "VIS", "RE", "INCADDR", "REPLINE", "REPLINE2" );
         // [5..13] [14] [15]
-        List< String > inputs = concat( bitRange( "H", 9 ), ImmutableList.of( "HE399", "VVIS", "V0" ) );
+        List< String > inputs = concat( bitRange( "H", 9 ), "HE399", "VVIS", "V0" );
         int h0 = outputNames.size();
         int he399 = h0 + 9;
         int vvis = he399 + 1;
@@ -247,7 +248,7 @@ public final class Video
     {
         List< String > outputNames = ImmutableList.of( "VVIS", "VS", "VE524", "SETADDR" );
         // [4..13] [14]
-        List< String > inputs = concat( bitRange( "V", 10 ), ImmutableList.of( "HE399" ) );
+        List< String > inputs = concat( bitRange( "V", 10 ), "HE399" );
         int v0 = outputNames.size();
         int he399 = v0 + 10;
         int bitCount = outputNames.size() + inputs.size();
@@ -304,7 +305,7 @@ public final class Video
     {
         List< String > outputNames = concat( bitRange( "A", 8 ), "AC" );
         // [9..16] [17] [18] [19]
-        List< String > inputs = concat( bitRange( "AS", 8 ), ImmutableList.of( "INCADDR", "REPLINE", "SETADDR" ) );
+        List< String > inputs = concat( bitRange( "AS", 8 ), "INCADDR", "REPLINE", "SETADDR" );
         int as0 = outputNames.size();
         int incaddr = as0 + 8;
         int repline = incaddr + 1;
@@ -345,8 +346,8 @@ public final class Video
 
     private static Chip addr1()
     {
-        List< String > outputNames = concat( bitRange( "A", 8, 7 ), ImmutableList.of( "A14INC", "A14REP" ) );
-        List< String > inputs = concat( bitRange( "AS", 8, 7 ), ImmutableList.of( "INCADDR", "REPLINE2", "SETADDR", "AC" ) );
+        List< String > outputNames = concat( bitRange( "A", 8, 7 ), "A14INC", "A14REP" );
+        List< String > inputs = concat( bitRange( "AS", 8, 7 ), "INCADDR", "REPLINE2", "SETADDR", "AC" );
         int as8 = outputNames.size();
         int incaddr = as8 + 7;
         int repline2 = incaddr + 1;
@@ -409,7 +410,7 @@ public final class Video
     private static Chip pixelconv()
     {
         List< String > outputNames = ImmutableList.of( "R0", "R1", "G0", "G1", "B0", "B1", "E0", "E1", "E2", "E3" );
-        List< String > inputs = concat( bitRange( "D", 8 ), ImmutableList.of( "H0", "VIS" ) );
+        List< String > inputs = concat( bitRange( "D", 8 ), "H0", "VIS" );
         int e0 = 6;
         int d0 = outputNames.size();
         int d4 = d0 + 4;

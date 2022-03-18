@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableList;
 import phodopus.video.Chip.BitFormatter;
 import phodopus.video.Simulation.State;
 
-public final class NaiveAddress
+public final class NaiveAddress2
 {
     public static void main( String[] args )
     {
@@ -62,13 +62,18 @@ public final class NaiveAddress
         System.out.println( "** Subtracting 160 (0xA0)" );
         state = state.with( "REPLINE", true ).next();
         print.accept( state );
+        state = state.with( "REPLINE2", true ).next();
+        print.accept( state );
         state = state.with( "REPLINE", true ).next();
+        print.accept( state );
+        state = state.with( "REPLINE2", true ).next();
         print.accept( state );
     }
 
     private static Chip addr0()
     {
-        List< String > outputNames = concat( bitRange( "A", 8 ), "AC", "AB" );
+        List< String > outputNames = concat( bitRange( "A", 8 ), "AC" );
+        // [9..16] [17] [18] [19]
         List< String > inputs = concat( bitRange( "AS", 8 ), "INCADDR", "REPLINE", "SETADDR" );
         int as0 = outputNames.size();
         int incaddr = as0 + 8;
@@ -79,8 +84,6 @@ public final class NaiveAddress
 
         List< TruthTable > tables = TruthTable.createMany( inputs, outputNames, i ->
         {
-            int ab = ( i & mask ) < 160 ? 1 << 9 : 0;
-            int ac = ( i & mask ) == mask ? 1 << 8 : 0;
             if ( isSet( i, setaddr ) )
             {
                 // SETADDR
@@ -89,54 +92,58 @@ public final class NaiveAddress
             if ( isSet( i, repline ) )
             {
                 // REPLINE
-                return ( ( i & mask ) - 160 ) & mask | ac | ab;
+                int ac = ( i & mask ) < 160 ? 1 << 8 : 0;
+                return ( ( i & mask ) - 160 ) & mask | ac;
             }
 
+            int ac = ( i & mask ) == mask ? 1 << 8 : 0;
             if ( isSet( i, incaddr ) )
             {
                 // INCADDR
-                return ( ( i & mask ) + 1 ) & mask | ac | ab;
+                return ( ( i & mask ) + 1 ) & mask | ac;
             }
             // Don't change.
-            return i & mask | ac | ab;
+            return i & mask | ac;
         } );
 
         List< Expression > outputs = optimise( tables );
         return new Chip( "addr0",
                          inputs,
                          outputs,
-                         new BitFormatter( "[x0-7] [8,AC] [9,AB]" ) );
+                         new BitFormatter( "[x0-7] [8,AC]" ) );
     }
 
     private static Chip addr1()
     {
-        List< String > outputNames = concat( bitRange( "A", 8, 7 ) );
-        List< String > inputs = concat( bitRange( "AS", 8, 7 ), "INCADDR", "REPLINE", "SETADDR", "AC", "AB" );
+        List< String > outputNames = concat( bitRange( "A", 8, 7 ), "A14INC", "A14REP" );
+        List< String > inputs = concat( bitRange( "AS", 8, 7 ), "INCADDR", "REPLINE2", "SETADDR", "AC" );
         int as8 = outputNames.size();
         int incaddr = as8 + 7;
-        int repline = incaddr + 1;
-        int setaddr = repline + 1;
+        int repline2 = incaddr + 1;
+        int setaddr = repline2 + 1;
         int ac = setaddr + 1;
-        int ab = ac + 1;
 
         int mask = 127;
 
         List< TruthTable > tables = TruthTable.createMany( inputs, outputNames, i ->
         {
+            int inc = ( i & mask ) + 1;
+            int dec = ( i & mask ) - 1;
+
             if ( isSet( i, setaddr ) )
             {
                 // SETADDR
                 return ( i >>> as8 ) & mask;
             }
-            if ( isSet( i, repline ) && isSet( i, ab ) )
+            if ( isSet( i, repline2 ) && isSet( i, ac ) )
             {
-                // REPLINE
-                return ( i & mask ) - 1;
+                // was REPLINE -- had to borrow 256
+                return dec & 127;
             }
             if ( isSet( i, incaddr ) && isSet( i, ac ) )
             {
-                // INCADDR
-                return ( i & mask ) + 1;
+                // INCADDR -- had to carry 256
+                return inc & 127;
             }
             // Don't change.
             return i & mask;

@@ -68,6 +68,12 @@ public final class Util
         return ImmutableList.copyOf( Iterables.concat( list, ImmutableList.of( item ) ) );
     }
 
+    @SafeVarargs
+    public static < T > List< T > concat( List< T > list, T... items )
+    {
+        return ImmutableList.copyOf( Iterables.concat( list, ImmutableList.copyOf( items ) ) );
+    }
+
     public static void dumpAllExpressions( Iterable< Chip > chips )
     {
         for ( Chip chip : chips )

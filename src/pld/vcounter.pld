@@ -1,0 +1,109 @@
+GAL22V10    
+VCounter
+
+
+Clock /Clear HE399 NC NC NC NC NC NC NC VE524 GND
+NC    V0     V2    V4 V6 V8 V9 V7 V5 V3 V1    VCC
+
+
+; 2 terms
+V0.R =
+      /Clear * /VE524 *  HE399 * /V0
+    + /Clear * /HE399 *  V0
+
+; 3 terms
+V1.R =
+      /Clear * /VE524 *  HE399 * /V1 *  V0
+    + /Clear * /VE524 *  V1 * /V0
+    + /Clear * /HE399 *  V1
+
+; 4 terms
+V2.R =
+      /Clear * /VE524 *  HE399 * /V2 *  V1 *  V0
+    + /Clear * /VE524 *  V2 * /V1
+    + /Clear * /VE524 *  V2 * /V0
+    + /Clear * /HE399 *  V2
+
+; 5 terms
+V3.R =
+      /Clear * /VE524 *  HE399 * /V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V3 * /V2
+    + /Clear * /VE524 *  V3 * /V1
+    + /Clear * /VE524 *  V3 * /V0
+    + /Clear * /HE399 *  V3
+
+; 6 terms
+V4.R =
+      /Clear * /VE524 *  HE399 * /V4 *  V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V4 * /V3
+    + /Clear * /VE524 *  V4 * /V2
+    + /Clear * /VE524 *  V4 * /V1
+    + /Clear * /VE524 *  V4 * /V0
+    + /Clear * /HE399 *  V4
+
+; 7 terms
+V5.R =
+      /Clear * /VE524 *  HE399 * /V5 *  V4 *  V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V5 * /V4
+    + /Clear * /VE524 *  V5 * /V3
+    + /Clear * /VE524 *  V5 * /V2
+    + /Clear * /VE524 *  V5 * /V1
+    + /Clear * /VE524 *  V5 * /V0
+    + /Clear * /HE399 *  V5
+
+; 8 terms
+V6.R =
+      /Clear * /VE524 *  HE399 * /V6 *  V5 *  V4 *  V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V6 * /V5
+    + /Clear * /VE524 *  V6 * /V4
+    + /Clear * /VE524 *  V6 * /V3
+    + /Clear * /VE524 *  V6 * /V2
+    + /Clear * /VE524 *  V6 * /V1
+    + /Clear * /VE524 *  V6 * /V0
+    + /Clear * /HE399 *  V6
+
+; 9 terms
+; 22V10 pins 15-22 only
+V7.R =
+      /Clear * /VE524 *  HE399 * /V7 *  V6 *  V5 *  V4 *  V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V7 * /V6
+    + /Clear * /VE524 *  V7 * /V5
+    + /Clear * /VE524 *  V7 * /V4
+    + /Clear * /VE524 *  V7 * /V3
+    + /Clear * /VE524 *  V7 * /V2
+    + /Clear * /VE524 *  V7 * /V1
+    + /Clear * /VE524 *  V7 * /V0
+    + /Clear * /HE399 *  V7
+
+; 10 terms
+; 22V10 pins 15-22 only
+V8.R =
+      /Clear * /VE524 *  HE399 * /V8 *  V7 *  V6 *  V5 *  V4 *  V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V8 * /V7
+    + /Clear * /VE524 *  V8 * /V6
+    + /Clear * /VE524 *  V8 * /V5
+    + /Clear * /VE524 *  V8 * /V4
+    + /Clear * /VE524 *  V8 * /V3
+    + /Clear * /VE524 *  V8 * /V2
+    + /Clear * /VE524 *  V8 * /V1
+    + /Clear * /VE524 *  V8 * /V0
+    + /Clear * /HE399 *  V8
+
+; 11 terms
+; 22V10 pins 16-21 only
+V9.R =
+      /Clear * /VE524 *  HE399 * /V9 *  V8 *  V7 *  V6 *  V5 *  V4 *  V3 *  V2 *  V1 *  V0
+    + /Clear * /VE524 *  V9 * /V8
+    + /Clear * /VE524 *  V9 * /V7
+    + /Clear * /VE524 *  V9 * /V6
+    + /Clear * /VE524 *  V9 * /V5
+    + /Clear * /VE524 *  V9 * /V4
+    + /Clear * /VE524 *  V9 * /V3
+    + /Clear * /VE524 *  V9 * /V2
+    + /Clear * /VE524 *  V9 * /V1
+    + /Clear * /VE524 *  V9 * /V0
+    + /Clear * /HE399 *  V9
+
+
+DESCRIPTION
+

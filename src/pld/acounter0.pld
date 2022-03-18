@@ -1,0 +1,107 @@
+GAL22V10    
+ACountr1
+
+
+Clock   AS7 AS6 AS5 AS4 AS3 AS2 AS1 AS0 INCADDR REPLINE GND
+SETADDR A0  A1  A2  A3  A4  A5  A7  A6  NC      AC      VCC
+
+
+; 4 terms
+A0.R =
+      /SETADDR * /REPLINE *  INCADDR * /A0
+    + /SETADDR *  REPLINE *  A0
+    + /SETADDR * /INCADDR *  A0
+    +  SETADDR *  AS0
+
+; 5 terms
+A1.R =
+      /SETADDR * /REPLINE *  INCADDR * /A1 *  A0
+    + /SETADDR *  REPLINE *  A1
+    + /SETADDR * /INCADDR *  A1
+    +  SETADDR *  AS1
+    + /SETADDR *  A1 * /A0
+
+; 6 terms
+A2.R =
+      /SETADDR * /REPLINE *  INCADDR * /A2 *  A1 *  A0
+    + /SETADDR *  REPLINE *  A2
+    + /SETADDR * /INCADDR *  A2
+    +  SETADDR *  AS2
+    + /SETADDR *  A2 * /A1
+    + /SETADDR *  A2 * /A0
+
+; 7 terms
+A3.R =
+      /SETADDR * /REPLINE *  INCADDR * /A3 *  A2 *  A1 *  A0
+    + /SETADDR *  REPLINE *  A3
+    + /SETADDR * /INCADDR *  A3
+    +  SETADDR *  AS3
+    + /SETADDR *  A3 * /A2
+    + /SETADDR *  A3 * /A1
+    + /SETADDR *  A3 * /A0
+
+; 8 terms
+A4.R =
+      /SETADDR * /REPLINE *  INCADDR * /A4 *  A3 *  A2 *  A1 *  A0
+    + /SETADDR *  REPLINE *  A4
+    + /SETADDR * /INCADDR *  A4
+    +  SETADDR *  AS4
+    + /SETADDR *  A4 * /A3
+    + /SETADDR *  A4 * /A2
+    + /SETADDR *  A4 * /A1
+    + /SETADDR *  A4 * /A0
+
+; 9 terms
+; 22V10 pins 15-22 only
+A5.R =
+      /SETADDR * /REPLINE * /INCADDR *  A5
+    + /SETADDR * /REPLINE *  A5 * /A4
+    + /SETADDR * /REPLINE *  A5 * /A3
+    + /SETADDR * /REPLINE *  A5 * /A2
+    + /SETADDR * /REPLINE *  A5 * /A1
+    + /SETADDR * /REPLINE *  A5 * /A0
+    + /SETADDR *  REPLINE * /A5
+    + /SETADDR *  INCADDR * /A5 *  A4 *  A3 *  A2 *  A1 *  A0
+    +  SETADDR *  AS5
+
+; 11 terms
+; 22V10 pins 16-21 only
+A6.R =
+      /SETADDR * /REPLINE *  INCADDR * /A6 *  A5 *  A4 *  A3 *  A2 *  A1 *  A0
+    + /SETADDR * /REPLINE * /INCADDR *  A6
+    + /SETADDR * /REPLINE *  A6 * /A5
+    + /SETADDR *  REPLINE * /A6 * /A5
+    + /SETADDR *  REPLINE *  A6 *  A5
+    + /SETADDR * /REPLINE *  A6 * /A4
+    + /SETADDR * /REPLINE *  A6 * /A3
+    + /SETADDR * /REPLINE *  A6 * /A2
+    + /SETADDR * /REPLINE *  A6 * /A1
+    + /SETADDR * /REPLINE *  A6 * /A0
+    +  SETADDR *  AS6
+
+; 13 terms
+; 22V10 pins 17-20 only
+A7.R =
+      /SETADDR * /REPLINE * /INCADDR *  A7
+    + /SETADDR * /REPLINE *  A7 * /A6
+    + /SETADDR *  REPLINE * /A7 *  A6
+    + /SETADDR * /REPLINE *  A7 * /A5
+    + /SETADDR *  REPLINE * /A7 *  A5
+    + /SETADDR * /REPLINE *  A7 * /A4
+    + /SETADDR * /REPLINE *  A7 * /A3
+    + /SETADDR * /REPLINE *  A7 * /A2
+    + /SETADDR * /REPLINE *  A7 * /A1
+    + /SETADDR * /REPLINE *  A7 * /A0
+    + /SETADDR *  INCADDR * /A7 *  A6 *  A5 *  A4 *  A3 *  A2 *  A1 *  A0
+    +  SETADDR *  AS7
+    + /SETADDR *  A7 * /A6 * /A5
+
+; 3 terms
+AC.R =
+      /SETADDR * /REPLINE *  A7 *  A6 *  A5 *  A4 *  A3 *  A2 *  A1 *  A0
+    + /SETADDR *  REPLINE * /A7
+    + /SETADDR *  REPLINE * /A6 * /A5
+
+
+DESCRIPTION
+

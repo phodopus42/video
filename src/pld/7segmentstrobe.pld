@@ -1,0 +1,74 @@
+GAL16V8
+7SegStrb
+
+
+NIB D0 D1 D2 D3 D4 D5 D6 D7 GND
+NC  O0 O1 O2 O3 O4 O5 O6 NC VCC
+
+
+O0 =
+       NIB * /D7 *  D6 * /D5 *  D4
+    +  NIB *  D7 *  D6 * /D4
+    +  NIB *  D7 *  D5 *  D4
+    +  NIB *  D6 *  D5 * /D4
+    + /NIB * /D3 * /D2 *  D1 * /D0
+    + /NIB *  D3 *  D2 *  D1
+    + /NIB *  D3 *  D2 * /D0
+
+O1 =
+       NIB * /D7 * /D6 * /D5 *  D4
+    +  NIB * /D7 *  D6 * /D5 * /D4
+    +  NIB *  D7 * /D6 *  D5 *  D4
+    +  NIB *  D7 *  D6 * /D5 *  D4
+    + /NIB * /D3 *  D2 *  D1 *  D0
+    + /NIB *  D3 *  D2 * /D1 * /D0
+    + /NIB * /D3 * /D2 * /D1
+
+O2 =
+       NIB * /D7 *  D6 *  D5 *  D4
+    +  NIB *  D7 *  D6 * /D5 * /D4
+    +  NIB * /D7 * /D6 * /D5
+    + /NIB * /D3 * /D2 * /D1 *  D0
+    + /NIB * /D3 *  D2 * /D1 * /D0
+    + /NIB *  D3 * /D2 *  D1 * /D0
+    + /NIB *  D2 *  D1 *  D0
+
+O3 =
+       NIB *  D7 *  D6 * /D5 *  D4
+    +  NIB * /D7 * /D6 *  D5
+    +  NIB * /D7 * /D6 *  D4
+    + /NIB * /D3 *  D2 * /D1
+    + /NIB * /D3 *  D0
+    + /NIB * /D2 * /D1 *  D0
+
+O4 =
+       NIB * /D7 * /D6 *  D5 * /D4
+    +  NIB *  D7 *  D6 *  D5
+    +  NIB *  D7 *  D6 * /D4
+    + /NIB * /D3 *  D2 * /D1 *  D0
+    + /NIB *  D3 *  D2 * /D0
+    + /NIB *  D3 *  D1 *  D0
+    + /NIB *  D2 *  D1 * /D0
+
+O5 =
+       NIB * /D7 * /D6 * /D5 *  D4
+    +  NIB * /D7 *  D6 * /D5 * /D4
+    +  NIB *  D7 * /D6 *  D5 * /D4
+    +  NIB *  D6 *  D5 *  D4
+    + /NIB * /D3 * /D2 * /D1 *  D0
+    + /NIB * /D3 *  D2 * /D1 * /D0
+    + /NIB *  D3 * /D2 *  D1 *  D0
+    + /NIB *  D3 *  D2 * /D1 *  D0
+
+O6 =
+       NIB * /D7 *  D6 * /D5
+    +  NIB * /D7 *  D4
+    +  NIB * /D6 * /D5 *  D4
+    + /NIB *  D3 *  D2 * /D1 *  D0
+    + /NIB * /D3 * /D2 *  D1
+    + /NIB * /D3 * /D2 *  D0
+
+
+
+DESCRIPTION
+

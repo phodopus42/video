@@ -1,0 +1,121 @@
+GAL22V10    
+ACountr1
+
+
+Clock   AS14 AS13 AS12 AS11 AS10 AS9 AS8 INCADDR REPLINE2 AC     GND
+SETADDR A8   A9   A10  A11  A12  A13 A14 NC      A14INC   A14REP VCC
+
+
+; 5 terms
+A8.R =
+       AC * /SETADDR *  REPLINE2 * /A8
+    +  AC * /SETADDR *  INCADDR * /A8
+    + /AC * /SETADDR *  A8
+    + /SETADDR * /REPLINE2 * /INCADDR *  A8
+    +  SETADDR *  AS8
+
+; 7 terms
+A9.R =
+       AC * /SETADDR * /REPLINE2 *  INCADDR * /A9 *  A8
+    +  AC * /SETADDR *  REPLINE2 * /A9 * /A8
+    + /AC * /SETADDR *  A9
+    + /SETADDR * /REPLINE2 * /INCADDR *  A9
+    + /SETADDR * /REPLINE2 *  A9 * /A8
+    + /SETADDR *  REPLINE2 *  A9 *  A8
+    +  SETADDR *  AS9
+
+; 9 terms
+; 22V10 pins 15-22 only
+A10.R =
+       AC * /SETADDR * /REPLINE2 *  INCADDR * /A10 *  A9 *  A8
+    +  AC * /SETADDR *  REPLINE2 * /A10 * /A9 * /A8
+    + /AC * /SETADDR *  A10
+    + /SETADDR * /REPLINE2 * /INCADDR *  A10
+    + /SETADDR * /REPLINE2 *  A10 * /A9
+    + /SETADDR *  REPLINE2 *  A10 *  A9
+    + /SETADDR * /REPLINE2 *  A10 * /A8
+    + /SETADDR *  REPLINE2 *  A10 *  A8
+    +  SETADDR *  AS10
+
+; 11 terms
+; 22V10 pins 16-21 only
+A11.R =
+       AC * /SETADDR * /REPLINE2 *  INCADDR * /A11 *  A10 *  A9 *  A8
+    +  AC * /SETADDR *  REPLINE2 * /A11 * /A10 * /A9 * /A8
+    + /AC * /SETADDR *  A11
+    + /SETADDR * /REPLINE2 * /INCADDR *  A11
+    + /SETADDR * /REPLINE2 *  A11 * /A10
+    + /SETADDR *  REPLINE2 *  A11 *  A10
+    + /SETADDR * /REPLINE2 *  A11 * /A9
+    + /SETADDR *  REPLINE2 *  A11 *  A9
+    + /SETADDR * /REPLINE2 *  A11 * /A8
+    + /SETADDR *  REPLINE2 *  A11 *  A8
+    +  SETADDR *  AS11
+
+; 13 terms
+; 22V10 pins 17-20 only
+A12.R =
+       AC * /SETADDR * /REPLINE2 *  INCADDR * /A12 *  A11 *  A10 *  A9 *  A8
+    +  AC * /SETADDR *  REPLINE2 * /A12 * /A11 * /A10 * /A9 * /A8
+    + /AC * /SETADDR *  A12
+    + /SETADDR * /REPLINE2 * /INCADDR *  A12
+    + /SETADDR * /REPLINE2 *  A12 * /A11
+    + /SETADDR *  REPLINE2 *  A12 *  A11
+    + /SETADDR * /REPLINE2 *  A12 * /A10
+    + /SETADDR *  REPLINE2 *  A12 *  A10
+    + /SETADDR * /REPLINE2 *  A12 * /A9
+    + /SETADDR *  REPLINE2 *  A12 *  A9
+    + /SETADDR * /REPLINE2 *  A12 * /A8
+    + /SETADDR *  REPLINE2 *  A12 *  A8
+    +  SETADDR *  AS12
+
+; 15 terms
+; 22V10 pins 18-19 only
+A13.R =
+       AC * /SETADDR * /REPLINE2 *  INCADDR * /A13 *  A12 *  A11 *  A10 *  A9 *  A8
+    +  AC * /SETADDR *  REPLINE2 * /A13 * /A12 * /A11 * /A10 * /A9 * /A8
+    + /AC * /SETADDR *  A13
+    + /SETADDR * /REPLINE2 * /INCADDR *  A13
+    + /SETADDR * /REPLINE2 *  A13 * /A12
+    + /SETADDR *  REPLINE2 *  A13 *  A12
+    + /SETADDR * /REPLINE2 *  A13 * /A11
+    + /SETADDR *  REPLINE2 *  A13 *  A11
+    + /SETADDR * /REPLINE2 *  A13 * /A10
+    + /SETADDR *  REPLINE2 *  A13 *  A10
+    + /SETADDR * /REPLINE2 *  A13 * /A9
+    + /SETADDR *  REPLINE2 *  A13 *  A9
+    + /SETADDR * /REPLINE2 *  A13 * /A8
+    + /SETADDR *  REPLINE2 *  A13 *  A8
+    +  SETADDR *  AS13
+
+; 5 terms
+A14.R =
+       AC * /SETADDR * /REPLINE2 *  INCADDR *  A14INC
+    +  AC * /SETADDR *  REPLINE2 *  A14REP
+    + /AC * /SETADDR *  A14
+    + /SETADDR * /REPLINE2 * /INCADDR *  A14
+    +  SETADDR *  AS14
+
+; 7 terms
+A14INC.R =
+      /A14 *  A13 *  A12 *  A11 *  A10 *  A9 *  A8
+    +  A14 * /A13
+    +  A14 * /A12
+    +  A14 * /A11
+    +  A14 * /A10
+    +  A14 * /A9
+    +  A14 * /A8
+
+; 7 terms
+A14REP.R =
+      /A14 * /A13 * /A12 * /A11 * /A10 * /A9 * /A8
+    +  A14 *  A13
+    +  A14 *  A12
+    +  A14 *  A11
+    +  A14 *  A10
+    +  A14 *  A9
+    +  A14 *  A8
+
+
+DESCRIPTION
+

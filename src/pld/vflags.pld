@@ -1,0 +1,40 @@
+GAL22V10    
+VFlags
+
+
+Clock V1   V3    V5 V7      V9 V8 V6 V4 V2 V0 GND
+HE399 VE524 VVIS VS SETADDR NC NC NC NC NC NC VCC
+
+
+; 3 terms
+VVIS.R =
+       HE399 * /V9 * /V8 * /V7 *  V6 *  V5 *  V4 *  V3 *  V2 * /V1 * /V0
+    + /HE399 *  VVIS
+    + /VE524 *  VVIS
+
+; 11 terms
+; 22V10 pins 16-21 only
+VS.R =
+       HE399 * /V9 * /V8 * /V7 * /V6 *  V4 * /V3 * /V2 *  V1 *  V0
+    + /HE399 *  VS
+    + /V9 * /V8 * /V7 * /V6 * /V5
+    +  V9 *  VS
+    +  V8 *  VS
+    +  V7 *  VS
+    +  V6 *  VS
+    + /V4 *  VS
+    +  V3 *  VS
+    +  V2 *  VS
+    + /V0 *  VS
+
+; 1 terms
+VE524.R =
+       V9 * /V8 * /V7 * /V6 * /V5 * /V4 *  V3 *  V2 * /V1 * /V0
+
+; 1 terms
+SETADDR.R =
+      /V9 * /V8 * /V7 *  V6 *  V5 *  V4 *  V3 *  V2 * /V1 * /V0
+
+
+DESCRIPTION
+
